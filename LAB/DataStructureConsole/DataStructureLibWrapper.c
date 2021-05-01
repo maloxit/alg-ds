@@ -1,83 +1,84 @@
 #include "DataStructureLibWrapper.h"
 #include "../HashTableLin/HashTableLin.h"
+#include "../BTree/BTree.h"
 #include <stdlib.h>
 #include <string.h>
 #pragma warning(disable:4996)
 
+static struct STRCTS structs;
+
 void* WrapperGet()
 {
-  return (void*)HashTableGet(1046527, 1);
+  structs.hTable = HashTableGet(1046527, 1);
+  structs.bTree = BTreeGet(5);
+  return (void*)(&structs);
 }
 
 void WrapperFree(void* dataStructure)
 {
-  HashTableFree((HashTable_t*)dataStructure);
+  HashTableFree(structs.hTable);
+  BTreeFree(structs.bTree);
 }
 
 OUT_CODE WrapperFind(void** dataStructure_p, int key, int* val_p)
 {
-  int r;
+  int rH, rB;
   int* tmp;
   char buff[30];
   sprintf(buff, "%i", key);
-  r = HashTableFind((HashTable_t*)(*dataStructure_p), buff, (void**)&tmp);
-  switch (r)
+  rH = HashTableFind(structs.hTable, buff, (void**)&tmp);
+  rB = BTreeFind(structs.bTree, key, val_p);
+  if (rH == rB)
   {
-  case 1:
-    *val_p = *tmp;
     return OC_YES;
-    break;
-  case -1:
+  }
+  else
+  {
     return OC_NO;
-    break;
-  default:
-    return OC_ERROR;
-    break;
   }
 }
 
 OUT_CODE WrapperAdd(void** dataStructure_p, int key, int val)
 {
-  int r;
+  int rH, rB;
   int* tmp = (int*)malloc(sizeof(int));
   char buff[30];
   sprintf(buff, "%i", key);
   *tmp = val;
-  r = HashTableAdd((HashTable_t*)(*dataStructure_p), buff, (void*)tmp);
-  switch (r)
+  rH = HashTableAdd(structs.hTable, buff, (void*)tmp);
+  if (rH == -1)
   {
-  case 1:
-    return OC_YES;
-    break;
-  case -1:
     free(tmp);
+  }
+  rB = BTreeAdd(structs.bTree, key, val);
+  if (rH == rB)
+  {
+    return OC_YES;
+  }
+  else
+  {
     return OC_NO;
-    break;
-  default:
-    return OC_ERROR;
-    break;
   }
 }
 
 OUT_CODE WrapperRemove(void** dataStructure_p, int key, int* val_p)
 {
-  int r;
+  int rH, rB;
   int* tmp;
   char buff[30];
   sprintf(buff, "%i", key);
-  r = HashTableRemove((HashTable_t*)(*dataStructure_p), buff, (void**)&tmp);
-  switch (r)
+  rH = HashTableRemove(structs.hTable, buff, (void**)&tmp);
+  if (rH == 1)
   {
-  case 1:
-    *val_p = *tmp;
     free(tmp);
+  }
+  rB = BTreeRemove(structs.bTree, key, val_p);
+  if (rH == rB)
+  {
     return OC_YES;
-    break;
-  case -1:
+  }
+  else
+  {
     return OC_NO;
-    break;
-  default:
-    return OC_ERROR;
-    break;
   }
 }

@@ -1,4 +1,6 @@
 #pragma once
+#include "../HashTableLin/HashTableLin.h"
+#include "../BTree/BTree.h"
 
 typedef struct _BTree_t BTree_t;
 

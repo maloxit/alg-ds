@@ -1,5 +1,13 @@
 #pragma once
 #include "DataStructureConsole.h"
+#include "../HashTableLin/HashTableLin.h"
+#include "../BTree/BTree.h"
+
+struct STRCTS
+{
+  HashTable_t* hTable;
+  BTree_t* bTree;
+};
 
 void* WrapperGet();
 

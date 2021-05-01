@@ -132,7 +132,6 @@ void HashTableFree(HashTable_t* table)
   }
   free(table->data);
   free(table);
-  printf("%u\n", maxKol);
 }
 
 static uint32_t hashTFunc(uint32_t n, uint32_t i, uint32_t k, uint32_t x)
@@ -198,7 +197,7 @@ int HashTableFind(HashTable_t* table, char* key, void** value_p)
       break;
     }
   }
-  if (delCount > 100)
+  if (delCount > 10)
   {
     HashTableRebuild(table);
   }
@@ -210,6 +209,13 @@ int HashTableAdd(HashTable_t* table, char* key, void* value)
   uint32_t i, a;
   uint32_t strHash = Crc32(key);
   char deleteFlag;
+  {
+    int* tmp;
+    if (1 == HashTableFind(table, key, &tmp))
+    {
+      return -1;
+    }
+  }
   for (i = 0; i < table->size; i++)
   {
     a = hashTFunc(table->size, i, table->mod, strHash);

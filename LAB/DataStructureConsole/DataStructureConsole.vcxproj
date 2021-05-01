@@ -148,6 +148,9 @@
     <ClInclude Include="DataStructureLibWrapper.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BTree\BTree.vcxproj">
+      <Project>{c7112073-34b6-477d-9f50-83d3b02a0352}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\HashTableLin\HashTableLin.vcxproj">
       <Project>{f86ef00a-9e7c-4abb-ae07-92bfa4ef630d}</Project>
     </ProjectReference>
